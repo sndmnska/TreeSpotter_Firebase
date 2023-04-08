@@ -23,7 +23,7 @@ class TreeListFragment : Fragment() {
         val recyclerView =  inflater.inflate(R.layout.fragment_tree_list, container, false)
         if (recyclerView !is RecyclerView) { throw  java.lang.RuntimeException("TreeListFragment should be a recyclerView") } // !is == "is not"
 
-        val trees = listOf<Tree>() //  some data to populate the list before list arrives fro Firebase. Empty list.
+        val trees = listOf<Tree>() //  some data to populate the list before list arrives from Firebase. Empty list.
         val adapter = TreeRecyclerViewAdapter(trees) { tree, isFavorite ->
             treeViewModel.setIsFavorite(tree, isFavorite)
         }

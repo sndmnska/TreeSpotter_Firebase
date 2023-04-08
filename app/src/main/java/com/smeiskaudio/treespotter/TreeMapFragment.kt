@@ -93,10 +93,9 @@ class TreeMapFragment : Fragment() {
             moveMapToUserLocation()
         }
 
-
-        // draw blue dot as user's location
-        // todo show no location message if location not granted,
+     // todo show no location message if location not granted,
     //      or if device does not have location.
+
     }
 
     private fun setAddTreeButtonEnabled(isEnabled: Boolean) {

@@ -13,6 +13,32 @@ import java.util.*
 
 private const val TAG  = "MAIN_ACTIVITY"
 
+/**
+ * Directions for the homework portion of lab:
+ *
+ *
+ * The app shows a single button, which when pressed, adds a tree with a random name at the user’s
+ * location.
+ *
+ * Modify your app so that instead of a random tree, the user can select or enter the new
+ * tree’s name.
+ *
+ * For example, the user could select from a list of choices, or you could allow the user to
+ * type in a name.
+ *
+ * You’ll need to think about what user interface components to use.
+ * There are many ways to solve this.
+ */
+
+/*  *PROGRAMMER BRAINSTORMING AREA*
+*  One way to tackle this is to open up a new Fragment to gather user data, then send this data
+* down the correct chain of data handling.
+*
+* A combo box can help with this, and I do wonder if there might be a way to collect data from
+* Firebase in terms of collecting tree names already collected, to ease the need for user typing.
+* It would be nice to be able to populate the combo box choices with that.
+*
+* */
 class MainActivity : AppCompatActivity() {
 
     val CURRENT_FRAGMENT_BUNDLE_KEY = "Current Fragment Bundle Key"
