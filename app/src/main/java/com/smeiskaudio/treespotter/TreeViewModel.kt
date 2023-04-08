@@ -45,4 +45,18 @@ class TreeViewModel: ViewModel() {
         Log.d(TAG, "Updating tree $tree to favorite $favorite")
         tree.documentReference?.update("favorite", favorite)
     }
+
+    fun addTree(tree: Tree) {
+        treeCollectionReference.add(tree)
+            .addOnSuccessListener { treeDocumentReference ->
+                Log.d(TAG, "New tree added at ${treeDocumentReference.path}")
+            }
+            .addOnFailureListener { error ->
+                Log.e(TAG,"Error adding tree $tree", error)
+            }
+    }
+
+    fun deleteTree(tree: Tree) {
+        tree.documentReference?.delete()
+    }
 }

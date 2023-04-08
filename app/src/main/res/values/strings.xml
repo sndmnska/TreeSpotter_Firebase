@@ -3,5 +3,12 @@
     <string name="map">Map</string>
     <string name="list">List</string>
     <string name="add_tree">Add tree</string>
+    <string name="give_permission">You\'ll need to grant location permission to add trees.</string>
+    <string name="no_location">My Location not available.</string>
+    <string name="grant_location_permission_to_add">Grant location permission to add tree</string>
+    <string name="added_tree">Added %1$s</string>
+    <string name="confirm_delete_tree">Delete %1$s?</string>
+    <string name="delete">Delete?</string>
+    <string name="tree_deleted">%1$s has been deleted</string>
 
 </resources>
