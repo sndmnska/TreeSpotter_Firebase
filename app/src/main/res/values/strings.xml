@@ -10,5 +10,28 @@
     <string name="confirm_delete_tree">Delete %1$s?</string>
     <string name="delete">Delete?</string>
     <string name="tree_deleted">%1$s has been deleted</string>
+    <string name="confirm_tree_name">%1$s</string>
+    <string name="description_text_a">Choose a tree from the list below…</string>
+    <string name="add_tree_button">Add Tree</string>
+    <string name="description_text_b">or choose \"Custom\" to write in a custom tree name!</string>
+    <string name="description_text_c">Your New Tree will be named:</string>
+    <string name="custom_tree_hint">Name</string>
+    <string name="no_tree_selected">(Choose a tree name option)</string>
+    <string name="please_choose_a_name">Please choose a name</string>
+
+    <string-array name="common_tree_list">
+        <item>*Custom Tree*</item>
+        <item>Ash</item>
+        <item>Birch</item>
+        <item>Camphor</item>
+        <item>Cedar</item>
+        <item>Elm</item>
+        <item>Fruit</item>
+        <item>Ginkgo</item>
+        <item>Oak</item>
+        <item>Palm</item>
+        <item>Pine</item>
+        <item>Redwood</item>
+    </string-array>
 
 </resources>

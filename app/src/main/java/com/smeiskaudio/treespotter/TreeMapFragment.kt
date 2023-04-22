@@ -1,7 +1,9 @@
 package com.smeiskaudio.treespotter
 
 import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +11,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
@@ -31,7 +36,9 @@ import java.util.*
 
 private const val TAG = "TREE_MAP_FRAGMENT"
 
-class TreeMapFragment : Fragment() {
+class TreeMapFragment : Fragment()  {
+
+    private var newTreeName: String? = null
 
     private lateinit var addTreeButton: FloatingActionButton
 
@@ -50,9 +57,17 @@ class TreeMapFragment : Fragment() {
 
     private var treeList = listOf<Tree>()
 
+    private val addTreeResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {result ->
+            handleNewTreeResult(result)
+        }
+
+
+
     private val treeViewModel: TreeViewModel by lazy {
         ViewModelProvider(requireActivity()).get(TreeViewModel::class.java)
     }
+
 
     // callback function
     private val mapReadyCallback = OnMapReadyCallback {googleMap ->
@@ -68,6 +83,7 @@ class TreeMapFragment : Fragment() {
         }
         updateMap()
     }
+
 
     private fun requestDeleteTree(tree: Tree) {
         AlertDialog.Builder(requireActivity())
@@ -221,7 +237,10 @@ class TreeMapFragment : Fragment() {
         addTreeButton = mainView.findViewById(R.id.add_tree)
         addTreeButton.setOnClickListener {
             // add tree at user's location - if location permission granted and location available.
-            addTreeAtLocation()
+            val showAddTreeIntent = Intent(activity, AddTreeActivity::class.java)
+            addTreeResultLauncher.launch(showAddTreeIntent)
+            addTreeAtLocation(newTreeName)
+            newTreeName = null // reset to null after assignment
         }
         val mapFragment = childFragmentManager.findFragmentById(R.id.map_view) as SupportMapFragment?
         mapFragment?.getMapAsync(mapReadyCallback)
@@ -243,7 +262,7 @@ class TreeMapFragment : Fragment() {
     }
 
     @SuppressLint("MissingPermission")
-    private fun addTreeAtLocation() {
+    private fun addTreeAtLocation(treeName: String?) {
         if (map == null) { return }
         if (fusedLocationProvider == null) { return }
         if (!locationPermissionGranted) {
@@ -256,7 +275,6 @@ class TreeMapFragment : Fragment() {
             locationRequestTask ->
             val location = locationRequestTask.result
             if (location != null) {
-                val treeName = getTreeName()
                 val tree = Tree(
                     name = treeName,
                     dateSpotted = Date(),
@@ -270,11 +288,19 @@ class TreeMapFragment : Fragment() {
             }
         }
 
+    }
+    private fun getTreeName(){
+//        return listOf("Fir","Elm","Birch","Pine").random() // dummy data
+
+        /*The intent of this function now is to start AddTreeActivity, add to backstack, then handle
+    * the result data returned from that activity*/
 
     }
-
-    private fun getTreeName(): String {
-        return listOf("Fir","Elm","Birch","Pine").random() // dummy data
+    private fun handleNewTreeResult(result: ActivityResult) {
+        if (result.resultCode == RESULT_OK) {
+            val intent = result.data
+            newTreeName = intent?.getStringExtra(EXTRA_ADD_TREE_NAME)
+        }
     }
 
 
