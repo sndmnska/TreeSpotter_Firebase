@@ -20,8 +20,9 @@
     <string name="please_choose_a_name">Please choose a name</string>
 
     <string-array name="common_tree_list">
-        <item>*Custom Tree*</item>
-        <item>Ash</item>
+        <item>Select a Tree Below:</item>
+        <item>Custom Tree Name</item>
+        <item>----------------</item>
         <item>Birch</item>
         <item>Camphor</item>
         <item>Cedar</item>

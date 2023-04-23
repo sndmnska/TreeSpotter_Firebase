@@ -12,12 +12,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -101,7 +98,7 @@ class TreeMapFragment : Fragment()  {
     }
 
     private fun updateMap() {
-        // todo draw markers
+        //  draw markers
         drawTrees()
 
         // draw blue dot as user's location
@@ -239,8 +236,6 @@ class TreeMapFragment : Fragment()  {
             // add tree at user's location - if location permission granted and location available.
             val showAddTreeIntent = Intent(activity, AddTreeActivity::class.java)
             addTreeResultLauncher.launch(showAddTreeIntent)
-            addTreeAtLocation(newTreeName)
-            newTreeName = null // reset to null after assignment
         }
         val mapFragment = childFragmentManager.findFragmentById(R.id.map_view) as SupportMapFragment?
         mapFragment?.getMapAsync(mapReadyCallback)
@@ -262,13 +257,14 @@ class TreeMapFragment : Fragment()  {
     }
 
     @SuppressLint("MissingPermission")
-    private fun addTreeAtLocation(treeName: String?) {
+    private fun addTreeAtLocation() {
         if (map == null) { return }
         if (fusedLocationProvider == null) { return }
         if (!locationPermissionGranted) {
             showSnackbar(getString(R.string.grant_location_permission_to_add))
             return
         }
+        if (newTreeName == null) { return }
 
         // all tests pass
         fusedLocationProvider?.lastLocation?.addOnCompleteListener(requireActivity()) {
@@ -276,30 +272,26 @@ class TreeMapFragment : Fragment()  {
             val location = locationRequestTask.result
             if (location != null) {
                 val tree = Tree(
-                    name = treeName,
+                    name = newTreeName,
                     dateSpotted = Date(),
                     location = GeoPoint(location.latitude, location.longitude)
                 )
                 treeViewModel.addTree(tree)
                 moveMapToUserLocation()
-                showSnackbar(getString(R.string.added_tree, treeName))
+                showSnackbar(getString(R.string.added_tree, newTreeName))
+                newTreeName = null // reset to null after assignment
             } else {
                 showSnackbar(getString(R.string.no_location))
             }
         }
 
     }
-    private fun getTreeName(){
-//        return listOf("Fir","Elm","Birch","Pine").random() // dummy data
 
-        /*The intent of this function now is to start AddTreeActivity, add to backstack, then handle
-    * the result data returned from that activity*/
-
-    }
     private fun handleNewTreeResult(result: ActivityResult) {
         if (result.resultCode == RESULT_OK) {
             val intent = result.data
             newTreeName = intent?.getStringExtra(EXTRA_ADD_TREE_NAME)
+            addTreeAtLocation()
         }
     }
 

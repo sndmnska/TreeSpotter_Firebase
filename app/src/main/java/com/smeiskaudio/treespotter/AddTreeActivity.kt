@@ -12,8 +12,6 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 
 const val EXTRA_ADD_TREE_NAME = "com.smeiskaudio.treespotter.EXTRA_ADD_TREE_NAME"
 
@@ -50,6 +48,35 @@ class AddTreeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
 
         updateTreePreview()
 
+
+        treeNameSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+                // An item was selected. You can retrieve the selected item using
+                // parent.getItemAtPosition(pos)
+                val selection = parent?.getItemAtPosition(pos)
+                Log.d(TAG, "Selection value $selection at position $pos ")
+                when (pos) {
+                    0, 2 -> { // Invalid selections should return null.
+                        treeName = null
+                        updateTreePreview()
+                    }
+                    1 -> { // "Custom Tree", take text from the EditText
+                        treeName = customTreeEditText.text.toString()
+                        updateTreePreview()
+                    }
+                    else -> {
+                        treeName = selection.toString()
+                        updateTreePreview()
+                    }
+                }
+            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                Log.d(TAG, "Nothing selected")
+            }
+        }
+        treeNamePreviewTextView.text = R.string.no_tree_selected.toString()
+
+
         addTreeButton.setOnClickListener {
             // if nothing selected and button clicked
             // Treat as if a name was intended to be added - give user an error
@@ -69,30 +96,23 @@ class AddTreeActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
         }
     }
 
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-        val selection = parent?.getItemAtPosition(pos)
-        Log.d(TAG, "Selection value = $selection")
-        if (selection == "*Custom Tree*") {
-            updateTreePreview()
-        } else {
-            treeName = selection.toString()
-            updateTreePreview()
-        }
-    }
 
     private fun updateTreePreview() {
         if (treeName == null) {
-            treeNamePreviewTextView.text = R.string.no_tree_selected.toString()
+            treeNamePreviewTextView.text = getString(R.string.no_tree_selected)
         } else {
             treeNamePreviewTextView.text = treeName
         }
     }
 
-    override fun onNothingSelected(p0: AdapterView<*>?) {
-        Log.d(TAG, "Nothing selected")
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        // Function defined in onCreate
     }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+        // Function defined in onCreate
+    }
+
 
 //    companion object AddTreeActivity : AppCompatActivity() {
 //        private val addTreeActivityLauncher = registerForActivityResult(
